@@ -13,6 +13,8 @@ final class Authenticated extends AuthState {
   Authenticated({required this.user});
 }
 
+final class Authenticating extends AuthState {}
+
 final class AuthError extends AuthState {
   final String error;
   AuthError({required this.error});
