@@ -9,15 +9,19 @@ import {
   updateProduct,
 } from '../controller/product.js';
 import fileUpload, { uploadImages } from '../middlewares/fileUpload.js';
+import requireToken from '../middlewares/requireToken.js';
+import requireAdminToken from '../middlewares/requireAdminToken.js';
 
 const productRouter = Router();
 
-productRouter.get('/', getProducts);
+productRouter.get('/', requireToken, getProducts);
 
-productRouter.get('/:id', getProductById);
+productRouter.get('/:id', requireToken, getProductById);
 
 productRouter.post(
   '/',
+  requireToken,
+  requireAdminToken,
   uploadImages,
   [
     check('name').notEmpty().withMessage('name is required'),
@@ -38,6 +42,7 @@ productRouter.post(
 
 productRouter.patch(
   '/checkout',
+  requireToken,
   [
     check('items')
       .notEmpty()
@@ -55,7 +60,7 @@ productRouter.patch(
   checkout
 );
 
-productRouter.patch('/:id', updateProduct);
-productRouter.delete('/:id', deleteProduct);
+productRouter.patch('/:id', requireToken, requireAdminToken, updateProduct);
+productRouter.delete('/:id', requireToken, requireAdminToken, deleteProduct);
 
 export default productRouter;

@@ -14,11 +14,11 @@ const MIME_TYPES = {
 const fileUpload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'uploads/images'); // Set the upload directory
+      cb(null, 'uploads/images');
     },
     filename: (req, file, cb) => {
       const ext = MIME_TYPES[file.mimetype];
-      cb(null, uuidv4() + '.' + ext); // Use UUID for unique filenames
+      cb(null, uuidv4() + '.' + ext);
     },
   }),
   fileFilter: (req, file, cb) => {
@@ -28,10 +28,9 @@ const fileUpload = multer({
   },
 });
 
-// Middleware to handle both single 'image' and multiple 'sub_images' uploads
 export const uploadImages = fileUpload.fields([
-  { name: 'image', maxCount: 1 }, // Single main image
-  { name: 'sub_images', maxCount: 5 }, // Up to 5 additional images in 'sub_images'
+  { name: 'image', maxCount: 1 },
+  { name: 'sub_images', maxCount: 5 },
 ]);
 
 export default uploadImages;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { login, signup } from '../controller/user.js';
+import { login, refreshToken, signup, verify } from '../controller/user.js';
 
 const userRouter = Router();
 
@@ -25,6 +25,17 @@ userRouter.post(
       .withMessage('maximum password lngth is 50'),
   ],
   signup
+);
+
+userRouter.post(
+  '/verify',
+  check('token').notEmpty().withMessage('token is required'),
+  verify
+);
+userRouter.post(
+  '/refresh',
+  check('token').notEmpty().withMessage('token is required'),
+  refreshToken
 );
 
 export default userRouter;
