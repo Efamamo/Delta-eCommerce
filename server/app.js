@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
-import welcomeRouter from "./routes/welcome.js";
 import { connectToDB } from "./database/mongoose.js";
+import userRouter from "./routes/user.js";
+import productRouter from "./routes/product.js";
+
 const app = express();
+app.use(express.json());
 app.use(cors());
 connectToDB();
 
-app.use("/api/v1", welcomeRouter);
+app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/products", productRouter);
 
 //Handles Not Found Routes
 app.use((req, res, next) => {
