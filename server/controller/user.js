@@ -1,9 +1,12 @@
 import { validationResult } from 'express-validator';
 import { formatErrors } from '../lib/utils.js';
-import { hashPassword } from '../services/password-service.js';
+import {
+  comparePasswords,
+  hashPassword,
+} from '../services/password-service.js';
 import { generateToken } from '../services/jwt-services.js';
-import { v4 } from 'uuid';
 import jsonwebtoken from 'jsonwebtoken';
+import { User } from '../models/user.js';
 const jwt = jsonwebtoken;
 
 function refresh(token) {
@@ -26,11 +29,11 @@ export const login = async (req, res) => {
 
   const { username, password } = req.body;
 
-  const user = {
-    _id: v4(),
-    username: username,
-    isAdmin: false,
-  };
+  const user = await User.findOne({ username });
+  if (!user) return res.sendStatus(401);
+
+  const match = await comparePasswords(password, user.password);
+  if (!match) return res.sendStatus(401);
 
   const token = generateToken(user);
   const refreshToken = generateToken(user);
@@ -47,16 +50,16 @@ export const signup = async (req, res) => {
   const { username, password } = req.body;
 
   const hashedPassword = await hashPassword(password);
-  console.log(hashedPassword);
-
-  const user = {
-    _id: v4(),
-    username: username,
+  const newUser = new User({
+    username,
+    password: hashedPassword,
     isAdmin: false,
-  };
+  });
 
-  const token = generateToken(user);
-  const refreshToken = generateToken(user);
+  await newUser.save();
+
+  const token = generateToken(newUser);
+  const refreshToken = generateToken(newUser);
 
   res.status(201).json({ accessToken: token, refreshToken: refreshToken });
 };

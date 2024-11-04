@@ -7,6 +7,7 @@ import {
   getProductById,
   getProducts,
   updateProduct,
+  updateProductImages,
 } from '../controller/product.js';
 import fileUpload, { uploadImages } from '../middlewares/fileUpload.js';
 import requireToken from '../middlewares/requireToken.js';
@@ -60,7 +61,20 @@ productRouter.patch(
   checkout
 );
 
-productRouter.patch('/:id', requireToken, requireAdminToken, updateProduct);
+productRouter.patch(
+  '/:id/image',
+  requireToken,
+  requireAdminToken,
+  uploadImages,
+  updateProductImages
+);
+productRouter.patch(
+  '/:id',
+  requireToken,
+  requireAdminToken,
+
+  updateProduct
+);
 productRouter.delete('/:id', requireToken, requireAdminToken, deleteProduct);
 
 export default productRouter;
