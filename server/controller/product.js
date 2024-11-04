@@ -18,19 +18,26 @@ export const getProductById = (req, res) => {
 export const addProduct = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
+    if (req.files) {
+      fs.unlink(req.files.image, (err) => {
+        console.log(err);
+      });
+      fs.unlink(req.files.sub_images, (err) => {
         console.log(err);
       });
     }
     return res.status(400).send({ errors: formatErrors(errors) });
   }
 
-  const imageURL = req.file;
+  const imageURL = req.files;
   if (!imageURL) {
-    return res.status(400).send({ error: 'image is required' });
+    return res.status(400).send({
+      errors: {
+        image: 'image is required',
+      },
+    });
   }
-  console.log(imageURL.path);
+  console.log(imageURL.image.path);
 
   res.status(201).json({ message: 'Successfully added a product' });
 };

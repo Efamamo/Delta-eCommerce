@@ -8,7 +8,7 @@ import {
   getProducts,
   updateProduct,
 } from '../controller/product.js';
-import fileUpload from '../middlewares/fileUpload.js';
+import fileUpload, { uploadImages } from '../middlewares/fileUpload.js';
 
 const productRouter = Router();
 
@@ -18,14 +18,13 @@ productRouter.get('/:id', getProductById);
 
 productRouter.post(
   '/',
-  fileUpload.single('image'),
-
+  uploadImages,
   [
     check('name').notEmpty().withMessage('name is required'),
     check('price').notEmpty().withMessage('price is required'),
-    check('price').isNumeric().withMessage('price should be number'),
+    check('price').isNumeric().withMessage('price should be a number'),
     check('amount').notEmpty().withMessage('amount is required'),
-    check('amount').isNumeric().withMessage('amount should be number'),
+    check('amount').isNumeric().withMessage('amount should be a number'),
     check('category').notEmpty().withMessage('category is required'),
     check('description')
       .isLength({ min: 20 })
