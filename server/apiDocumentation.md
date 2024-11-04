@@ -198,3 +198,43 @@ http://localhost:5001/api/v1
     "userId": "user123"
   }
   ```
+
+### Verify Token
+
+**Endpoint:** `POST /auth/verify`  
+**Description:** Verifies the provided refresh token.
+
+- **URL:** `/auth/verify`
+- **Request Body:**
+
+  | Field | Type   | Description             |
+  | ----- | ------ | ----------------------- |
+  | token | string | Refresh token to verify |
+
+- **Example:**
+
+  ```json
+  {
+    "token": "your_refresh_token"
+  }
+  ```
+
+### Refresh Token
+
+**Endpoint:** `POST /auth/refresh`  
+**Description:** Verifies the provided refresh token.
+
+- **URL:** `/auth/refresh`
+- **Request Body:**
+
+  | Field | Type   | Description             |
+  | ----- | ------ | ----------------------- |
+  | token | string | Refresh token to verify |
+
+- **Example:**
+
+  ```json
+  {
+    "token": "your_refresh_token"
+  }
+  ```
