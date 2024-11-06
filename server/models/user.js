@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
@@ -15,6 +20,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  otp: { type: Number },
+  otpExpiration: { type: Date },
+  isVerified: { type: Boolean, default: false },
 });
 
 export const User = mongoose.model('User', userSchema);

@@ -1,6 +1,13 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { login, refreshToken, signup, verify } from '../controller/user.js';
+import {
+  login,
+  refreshToken,
+  resendOTP,
+  signup,
+  verify,
+  verifyUser,
+} from '../controller/user.js';
 
 const userRouter = Router();
 
@@ -16,6 +23,8 @@ userRouter.post(
 userRouter.post(
   '/signup',
   [
+    check('email').notEmpty().withMessage('email cant be empty'),
+    check('email').normalizeEmail().isEmail().withMessage('invalid email'),
     check('username').notEmpty().withMessage('username cant be empty'),
     check('password')
       .isLength({ min: 6 })
@@ -36,6 +45,24 @@ userRouter.post(
   '/refresh',
   check('token').notEmpty().withMessage('token is required'),
   refreshToken
+);
+
+userRouter.patch(
+  '/verify-otp',
+  [
+    check('email').notEmpty().withMessage('email cant be empty'),
+    check('email').normalizeEmail().isEmail().withMessage('invalid email'),
+    check('otp').notEmpty().withMessage('otp is required'),
+  ],
+  verifyUser
+);
+userRouter.post(
+  '/send-otp',
+  [
+    check('email').notEmpty().withMessage('email cant be empty'),
+    check('email').normalizeEmail().isEmail().withMessage('invalid email'),
+  ],
+  resendOTP
 );
 
 export default userRouter;
